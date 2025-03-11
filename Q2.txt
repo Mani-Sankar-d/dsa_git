@@ -1,0 +1,83 @@
+Given an encoded string, return its decoded string.
+
+The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+
+You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there will not be input like 3a or 2[4].
+
+
+
+
+
+
+typedef struct node {
+    string data;
+    struct node* next;
+}nd;
+nd* top=NULL;
+void push(string str){
+    nd* newnode=new nd;
+    newnode->data=str;
+    newnode->next=top;
+    top=newnode;
+    cout<<"pushed--> "<<str<<"\n";
+}
+string pop(){
+    if(top==NULL)
+        return "NULL";
+    nd* temp=top;
+    top=top->next;
+    cout<<"popped--> "<<temp->data<<"\n";
+    return temp->data;
+}
+char check(){
+    if(top->data=="]")
+        return ']';
+    return 'a';
+}
+
+class Solution {
+public:
+    string decodeString(string s) {
+        int i=0;
+        while(s[i]!='\0'){
+            i++;
+        }     
+        for(int j=i-1;j>=0;j--){
+            if(s[j]=='[' && s[j+1]!=']'){
+                cout<<"\n[ detected \n ";
+                int num;
+                int sum=0;
+                int m;
+                for(m=j-1;s[m]-'0'<=9;m--){
+                    
+                    num=chartoint(s[m]);
+                    sum+=num* pow(10,j-1-m);
+                    if(m==0) break;
+                }
+                string c=pop(); //[] case may arise
+                while(check()!=']'){
+                    string temp=pop();
+                    c=strcat(c,temp);
+                }
+                cout<<"\nc is "<<c<<"\n";
+                pop();
+                string s="";
+                for(int l=0;l<sum;l++){
+                    push(c);
+                }
+                
+                j=m+1;
+            }else if(s[j]=='[' && s[j+1]==']'){pop();
+            }else if(s[j]-'0'>9){push(charToString(s[j]));}
+            
+        }
+        string ans="";
+        string temp=pop();
+        while(temp!="NULL"){
+            ans=strcat(ans,temp);
+            temp=pop();
+        }
+        return ans;
+    }
+};
+
