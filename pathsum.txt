@@ -1,0 +1,33 @@
+Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the node values in the path equals targetSum. Each path should be returned as a list of the node values, not node references.
+
+A root-to-leaf path is a path starting from the root and ending at any leaf node. A leaf is a node with no children.
+
+
+
+ void pathss(TreeNode* root,int targetSum,int *csum,vector<int> &cpath,vector<vector<int>> &paths){
+   if(root==NULL){return;}
+    else if((root->left==NULL && root->right==NULL)&& *csum==targetSum-root->val){
+        cpath.push_back(root->val);
+        paths.push_back(cpath);
+        cpath.erase(cpath.end()-1,cpath.end());
+        return;
+    }else if((root->left==NULL && root->right==NULL)&& *csum!=targetSum-root->val){return;}
+    *csum+=root->val; 
+    cpath.push_back(root->val);
+    pathss(root->left,targetSum,csum,cpath,paths);
+    if(root->right!=NULL) pathss(root->right,targetSum,csum,cpath,paths);  
+    cpath.erase(cpath.end()-1,cpath.end());
+    *csum-=root->val;
+    return;
+ }
+class Solution {
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+       int csum=0;
+       vector<int> cpath;
+       vector<vector<int>> paths;
+       if(root==NULL || (root->val==-2 && targetSum==-2)) return paths;
+       pathss(root,targetSum,&csum,cpath,paths);
+       return paths;
+    }
+};
