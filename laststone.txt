@@ -1,0 +1,64 @@
+You are given an array of integers stones where stones[i] is the weight of the ith stone.
+
+We are playing a game with the stones. On each turn, we choose the heaviest two stones and smash them together. Suppose the heaviest two stones have weights x and y with x <= y. The result of this smash is:
+
+If x == y, both stones are destroyed, and
+If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.
+At the end of the game, there is at most one stone left.
+
+Return the weight of the last remaining stone. If there are no stones left, return 0.
+
+void swap(int* a,int* b){
+    int temp=*a;
+    *a=*b;
+    *b=temp;
+}
+
+void heapify(vector<int> &arr,int n,int i){
+    int largest=i;
+    int left=2*i+1;
+    int right=2*i+2;
+    if(left<n && arr[left]>arr[largest]) largest=left;
+    if(right<n && arr[right]>arr[largest]) largest=right;
+    if(i!=largest){
+        swap(&arr[i],&arr[largest]);
+        heapify(arr,n,largest);
+    }
+}
+int del(vector<int> &arr,int n){
+    int temp=arr[0];
+    swap(&arr[0],&arr[n-1]);
+    heapify(arr,n-1,0);
+    return temp;
+}
+void buildheap(vector<int> &arr){
+    int n=arr.size();
+    for(int i=n/2-1;i>=0;i--) heapify(arr,n,i);
+}
+void insert(vector<int> &arr,int i){
+    int parent=(i-1)/2;
+    while(i>0){
+        if(arr[i]>arr[(i-1)/2]) swap(&arr[i],&arr[(i-1)/2]);
+        i=(i-1)/2;
+    }
+}
+class Solution {
+public:
+    int lastStoneWeight(vector<int>& stones) {
+        buildheap(stones);
+        int heap_size=stones.size();
+        while(!stones.empty()){
+            if(stones.size()==1) return stones[0];
+            int a=del(stones,heap_size--);
+            int b=del(stones,heap_size--);
+            stones.pop_back();
+            stones.pop_back();
+            if(a-b>0) stones.push_back(a-b);
+            insert(stones,stones.size()-1);
+            heap_size=stones.size();
+        }
+        
+        
+        return 0;
+    }
+};
