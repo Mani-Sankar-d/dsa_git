@@ -1,0 +1,36 @@
+Given an array of integers nums, sort the array in ascending order and return it.
+
+You must solve the problem without using any built-in functions in O(nlog(n)) time complexity and with the smallest space complexity possible.
+
+ void merge(vector<int> &arr,int low,int high){
+    int mid=(low+high)/2;
+    vector<int> help;
+    int i=low;
+    int j=mid+1;
+    int k=0;
+    while(i<=mid && j<=high){
+        if(arr[i]<=arr[j]) help.push_back(arr[i++]);
+        if(arr[j]<arr[i]) help.push_back(arr[j++]);
+    }
+    while(i<=mid){
+        help.push_back(arr[i++]);
+    }
+    while(j<=high){
+        help.push_back(arr[j++]);
+    }
+    for(int i=low;i<=high;i++) arr[i]=help[i-low];
+}
+void mergesort(vector<int> &arr,int low,int high){
+    if(low>=high) return;
+    int mid=(low+high)/2;
+    mergesort(arr,low,mid);
+    mergesort(arr,mid+1,high);
+    merge(arr,low,high);
+}
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        mergesort(nums,0,nums.size()-1);
+        return nums;
+    }
+};
