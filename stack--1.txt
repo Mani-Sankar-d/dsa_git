@@ -1,0 +1,8 @@
+stack-->1
+queue-->1
+bst---->1
+heap--->2
+graph-->1
+countsort-->1
+mergesort-->1
+radixsort-->1

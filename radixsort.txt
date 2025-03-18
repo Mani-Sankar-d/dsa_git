@@ -1,0 +1,46 @@
+Given an integer array nums, return the maximum difference between two successive elements in its sorted form. If the array contains less than two elements, return 0.
+
+You must write an algorithm that runs in linear time and uses linear extra space.
+
+#include<deque>
+#include<math.h>
+void put_in_radix(vector<int> nums,deque<int> radix[],int exp){
+    int p,temp;
+    for(int i=0;i<nums.size();i++){
+        p=0;
+        temp=nums[i];
+        int idx=int(temp/pow(10,exp))%10;
+        radix[idx].push_back(nums[i]);
+    }
+}
+
+
+class Solution {
+public:
+    int maximumGap(vector<int>& nums) {
+        if(nums.size()<0) return 0;
+        int max=*max_element(nums.begin(),nums.end());
+        int no_of_digits=0;
+        while(max!=0){
+            max=max/10;
+            no_of_digits++;
+        }
+        deque<int> radix[10];
+
+        for(int p=0;p<no_of_digits;p++){
+            put_in_radix(nums,radix,p);
+            int k=0;
+            for(int i=0;i<10;i++){
+                while(!radix[i].empty()){
+                    nums[k++]=radix[i].front();
+                    radix[i].pop_front();
+                }
+            }
+        }
+        int max_difference=0;
+        for(int i=1;i<nums.size();i++){
+            if(nums[i]-nums[i-1] >max_difference) max_difference=nums[i]-nums[i-1];
+        }
+        return max_difference;
+    }
+};
