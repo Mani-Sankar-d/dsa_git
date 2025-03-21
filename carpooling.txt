@@ -1,0 +1,66 @@
+There is a car with capacity empty seats. The vehicle only drives east (i.e., it cannot turn around and drive west).
+
+You are given the integer capacity and an array trips where trips[i] = [numPassengersi, fromi, toi] indicates that the ith trip has numPassengersi passengers and the locations to pick them up and drop them off are fromi and toi respectively. The locations are given as the number of kilometers due east from the car's initial location.
+
+Return true if it is possible to pick up and drop off all passengers for all the given trips, or false otherwise.
+
+ 
+
+bool compareByIndex(const std::vector<int>& a, const std::vector<int>& b, int index) {
+    return a[index] < b[index]; 
+}
+void sort2DArrayByIndex(std::vector<std::vector<int>>& trips, int index) {
+    std::sort(trips.begin(), trips.end(), [index](const std::vector<int>& a, const std::vector<int>& b) {
+        return compareByIndex(a, b, index);
+    });
+}
+class Solution {
+public:
+    bool carPooling(vector<vector<int>>& trips, int capacity) {
+       
+        vector<int> picks;
+        vector<int> pas_picks;
+        vector<int> drops;
+        vector<int> pas_drops;
+        int no_of_passengers=0;
+         sort2DArrayByIndex(trips, 1);
+        for(int i=0;i<trips.size();i++){
+            for (int j=0;j<trips[0].size();j++){
+                cout<<trips[i][j]<<" ";
+            }
+            cout<<"\n";
+        }
+        for(int i=0;i<trips.size();i++){
+            picks.push_back(trips[i][1]);
+            pas_picks.push_back(trips[i][0]);
+        }
+         sort2DArrayByIndex(trips, 2);
+        for(int i=0;i<trips.size();i++){
+            for (int j=0;j<trips[0].size();j++){
+                cout<<trips[i][j]<<" ";
+            }
+            cout<<"\n";
+        }
+        for(int i=0;i<trips.size();i++){
+            drops.push_back(trips[i][2]);
+             pas_drops.push_back(trips[i][0]);
+        }
+        int next_pick=0;
+        int next_drop=0;
+        int last_stop=*max_element(drops.begin(),drops.end());
+        for(int stop=0;stop<=last_stop;stop++){
+            if(next_drop<drops.size() && stop==drops[next_drop]){
+             while(next_drop<drops.size() && drops[next_drop]==stop){   
+             cout<<"dropped "<<pas_drops[next_drop]<<" at "<<stop<<'\n';
+             no_of_passengers-=pas_drops[next_drop++];
+            }}
+            if(next_pick<picks.size() && stop==picks[next_pick]) {
+                while(next_pick<picks.size() && picks[next_pick]==stop){
+                cout<<"picked "<<pas_picks[next_pick]<<" at "<<stop<<'\n';
+                no_of_passengers+=pas_picks[next_pick++];
+            }}
+            if(no_of_passengers>capacity) return false;
+        }
+        return true;
+    }
+};
