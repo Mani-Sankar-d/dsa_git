@@ -1,0 +1,23 @@
+Given the root of a binary tree, return the inorder traversal of its nodes' values.
+
+
+
+
+
+
+void inorder(struct TreeNode* root,int* returnSize,int arr[],int* idx){
+    if(root==NULL){return;}
+    inorder(root->left,returnSize,arr,idx);
+    arr[*idx]=root->val;
+    *idx+=1;
+    *returnSize+=1;
+    inorder(root->right,returnSize,arr,idx);
+ }
+int* inorderTraversal(struct TreeNode* root, int* returnSize) {
+    *returnSize=0;
+    printf("%d",*returnSize);
+    int* arr=(int*)malloc(1000*sizeof(int));
+    int idx=0;
+    inorder(root,returnSize,arr,&idx);
+    return arr;
+}
