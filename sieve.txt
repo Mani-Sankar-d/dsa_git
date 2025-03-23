@@ -1,0 +1,32 @@
+Given an integer n, return the number of prime numbers that are strictly less than n.
+
+ vector<bool> sieve_prime(int n){
+    
+    vector<bool> store(n,true);
+    if(n==0) return store;
+    store[0]=false;
+    store[1]=false;
+    int i=2;int j,temp;
+    while(i<=sqrt(n)){
+        temp=i;
+        j=2*temp;
+        while(j<n){
+            store[j]=false;
+            j+=temp;
+        }
+        i++;
+    }
+    return store;
+}
+
+class Solution {
+public:
+    int countPrimes(int n) {
+        vector<bool> a=sieve_prime(n);
+        int count =0;
+        for(int i=1;i<a.size();i++){
+            if(a[i]==true) count++;
+        }
+        return count;
+    }
+};
